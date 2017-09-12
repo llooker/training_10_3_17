@@ -2,6 +2,7 @@ view: products {
   sql_table_name: public.products ;;
 
   dimension: id {
+    hidden:  yes
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
@@ -29,7 +30,7 @@ view: products {
 
   dimension: distribution_center_id {
     type: number
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.distribution_center_id ;;
   }
 
