@@ -98,6 +98,31 @@ view: order_items {
     drill_fields: [detail*]
   }
 
+  measure: total_sale_price {
+    type: sum
+    value_format_name: usd
+    sql: ${sale_price} ;;
+    drill_fields: [detail*]
+  }
+
+  measure: order_count {
+    type: count_distinct
+    sql: ${order_id} ;;
+  }
+
+  measure: average_sale_price {
+    type: average
+    value_format_name: usd
+    sql: ${sale_price} ;;
+    drill_fields: [detail*]
+  }
+
+  measure: average_spend_per_user {
+    type: number
+    value_format_name: usd
+    sql: 1.0 * ${total_sale_price} / NULLIF(${users.count},0) ;;
+  }
+
   # ----- Sets of fields for drilling ------
   set: detail {
     fields: [

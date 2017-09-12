@@ -2,6 +2,7 @@ view: users {
   sql_table_name: public.users ;;
 
   dimension: id {
+    hidden:  yes
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
@@ -43,6 +44,7 @@ view: users {
   }
 
   dimension: first_name {
+    hidden:  yes
     type: string
     sql: ${TABLE}.first_name ;;
   }
@@ -53,8 +55,14 @@ view: users {
   }
 
   dimension: last_name {
+    hidden:  yes
     type: string
     sql: ${TABLE}.last_name ;;
+  }
+
+  dimension: name {
+    type: string
+    sql: ${first_name} || ' ' || ${last_name} ;;
   }
 
   dimension: latitude {
