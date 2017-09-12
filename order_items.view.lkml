@@ -36,12 +36,14 @@ view: order_items {
   }
 
   dimension: inventory_item_id {
+  hidden:  yes
     type: number
     # hidden: yes
     sql: ${TABLE}.inventory_item_id ;;
   }
 
   dimension: order_id {
+    hidden:  yes
     type: number
     sql: ${TABLE}.order_id ;;
   }
@@ -86,7 +88,7 @@ view: order_items {
 
   dimension: user_id {
     type: number
-    # hidden: yes
+    hidden: yes
     sql: ${TABLE}.user_id ;;
   }
 
