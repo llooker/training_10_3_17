@@ -6,9 +6,13 @@ include: "*.view"
 # include all the dashboards
 include: "*.dashboard"
 
-explore: distribution_centers {}
+explore: distribution_centers {
+  hidden: yes
+}
 
-explore: etl_jobs {}
+explore: etl_jobs {
+  hidden: yes
+}
 
 explore: events {
   join: users {
@@ -18,9 +22,8 @@ explore: events {
   }
 }
 
-explore: foo {}
-
 explore: inventory_items {
+  hidden: yes
   join: products {
     type: left_outer
     sql_on: ${inventory_items.product_id} = ${products.id} ;;
@@ -61,6 +64,7 @@ explore: order_items {
 }
 
 explore: products {
+  hidden: yes
   join: distribution_centers {
     type: left_outer
     sql_on: ${products.distribution_center_id} = ${distribution_centers.id} ;;
@@ -68,4 +72,7 @@ explore: products {
   }
 }
 
-explore: users {}
+#explore: users {
+#  hidden: yes
+#  }
+#}
