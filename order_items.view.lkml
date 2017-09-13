@@ -143,7 +143,7 @@ view: order_items {
   measure: shipping_time {
     description: "Shipping time in days"
     type: number
-    sql: ${DATEDIFF(day, ${order_items.shipped_date}, ${order_items.delivered_date)} ;;
+    sql: DATEDIFF(day, ${order_items.shipped_date}, ${order_items.delivered_date)} ;;
   }
 
   # ----- Sets of fields for drilling ------
