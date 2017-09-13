@@ -9,6 +9,7 @@ view: order_items {
   }
 
   dimension_group: created {
+    description: "When the order was created"
     type: time
     timeframes: [
       raw,
@@ -23,6 +24,7 @@ view: order_items {
   }
 
   dimension_group: delivered {
+    description: "When the order was delivered"
     type: time
     timeframes: [
       raw,
@@ -36,20 +38,8 @@ view: order_items {
     sql: ${TABLE}.delivered_at ;;
   }
 
-  dimension: inventory_item_id {
-  hidden:  yes
-    type: number
-    # hidden: yes
-    sql: ${TABLE}.inventory_item_id ;;
-  }
-
-  dimension: order_id {
-    hidden:  yes
-    type: number
-    sql: ${TABLE}.order_id ;;
-  }
-
   dimension_group: returned {
+    description: "When the order was returned"
     type: time
     timeframes: [
       raw,
@@ -69,6 +59,7 @@ view: order_items {
   }
 
   dimension_group: shipped {
+    description: "When the order was shipped"
     type: time
     timeframes: [
       raw,
@@ -83,8 +74,24 @@ view: order_items {
   }
 
   dimension: status {
+    description: "Whether order is processing, shipped, completed, etc."
     type: string
     sql: ${TABLE}.status ;;
+  }
+
+## HIDDEN DIMENSIONS ##
+
+  dimension: inventory_item_id {
+  hidden:  yes
+    type: number
+    # hidden: yes
+    sql: ${TABLE}.inventory_item_id ;;
+  }
+
+  dimension: order_id {
+    hidden:  yes
+    type: number
+    sql: ${TABLE}.order_id ;;
   }
 
   dimension: user_id {
@@ -92,6 +99,8 @@ view: order_items {
     hidden: yes
     sql: ${TABLE}.user_id ;;
   }
+
+## MEASURES ##
 
   measure: count {
     type: count
@@ -106,6 +115,7 @@ view: order_items {
   }
 
   measure: order_count {
+    description: "A count of unique orders"
     type: count_distinct
     sql: ${order_id} ;;
   }
@@ -121,6 +131,19 @@ view: order_items {
     type: number
     value_format_name: usd
     sql: 1.0 * ${total_sale_price} / NULLIF(${users.count},0) ;;
+  }
+
+  measure: profit {
+    description: "Profit made on any one item"
+    type: number
+    value_format_name: usd
+    sql: ${sale_price} - ${inventory_items.cost} ;;
+  }
+
+  measure: shipping_time {
+    description: "Shipping time in days"
+    type: number
+    sql: ${DATEDIFF(day, ${order_items.shipped_date}, ${order_items.delivered_date)} ;;
   }
 
   # ----- Sets of fields for drilling ------
