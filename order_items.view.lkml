@@ -79,6 +79,12 @@ view: order_items {
     sql: ${TABLE}.status ;;
   }
 
+  dimension: shipping_time {
+    description: "Shipping time in days"
+    type: number
+    sql: DATEDIFF(day, ${order_items.shipped_date}, ${order_items.delivered_date}) ;;
+  }
+
 ## HIDDEN DIMENSIONS ##
 
   dimension: inventory_item_id {
@@ -98,6 +104,14 @@ view: order_items {
     type: number
     hidden: yes
     sql: ${TABLE}.user_id ;;
+  }
+
+  dimension: profit {
+    description: "Profit made on any one item"
+    hidden:  yes
+    type: number
+    value_format_name: usd
+    sql: ${sale_price} - ${inventory_items.cost} ;;
   }
 
 ## MEASURES ##
@@ -133,18 +147,18 @@ view: order_items {
     sql: 1.0 * ${total_sale_price} / NULLIF(${users.count},0) ;;
   }
 
-  measure: profit {
-    description: "Profit made on any one item"
-    type: number
+  measure: sum_of_profit {
+    type: sum
+    sql: ${profit} ;;
     value_format_name: usd
-    sql: ${sale_price} - ${inventory_items.cost} ;;
   }
 
-  measure: shipping_time {
-    description: "Shipping time in days"
-    type: number
-    sql: DATEDIFF(day, ${order_items.shipped_date}, ${order_items.delivered_date)} ;;
+  measure: sum_shipping_time {
+    type: sum
+    sql: ${shipping_time} ;;
+    value_format: "0\" days\""
   }
+
 
   # ----- Sets of fields for drilling ------
   set: detail {

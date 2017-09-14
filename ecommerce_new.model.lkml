@@ -6,6 +6,11 @@ include: "*.view"
 # include all the dashboards
 include: "*.dashboard"
 
+map_layer: map_regions {
+  file: "map.topojson"
+  property_key: "region"
+}
+
 explore: distribution_centers {
   hidden: yes
 }
