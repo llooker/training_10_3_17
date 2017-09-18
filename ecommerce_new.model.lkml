@@ -15,10 +15,6 @@ explore: distribution_centers {
   hidden: yes
 }
 
-explore: etl_jobs {
-  hidden: yes
-}
-
 explore: events {
   hidden:  yes
   join: users {
@@ -44,6 +40,12 @@ explore: order_items {
     relationship: many_to_one
   }
 
+#  join: user_order_facts {
+#    type: left_outer
+#    sql_on: ${user_order_facts.user_id} = ${user_id} ;;
+#    relationship: many_to_one
+#  }
+
   join: inventory_items {
     type: left_outer
     sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
@@ -56,16 +58,11 @@ explore: order_items {
     relationship: many_to_one
   }
 
-  join: orders {
+  join: distribution_centers {
     type: left_outer
-    sql_on: ${order_items.inventory_item_id} = ${inventory_items.id} ;;
+    sql_on: ${products.distribution_center_id} = ${distribution_centers.id} ;;
     relationship: many_to_one
   }
-#  join: distribution_centers {
-#    type: left_outer
-#    sql_on: ${products.distribution_center_id} = ${distribution_centers.id} ;;
-#    relationship: many_to_one
-#  }
 }
 
 explore: products {
