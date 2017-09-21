@@ -36,6 +36,7 @@
 
     dimension: order_value {
       type: number
+      value_format_name: usd
       sql: ${TABLE}.order_value ;;
     }
 
@@ -60,6 +61,7 @@
 
     dimension: lifetime_revenue {
       type: number
+      value_format_name: usd
       sql: ${TABLE}.lifetime_revenue ;;
     }
 
@@ -87,16 +89,19 @@
 
     dimension: distinct_months_with_orders {
       type: number
+      value_format_name: decimal_0
       sql: ${TABLE}.number_of_distinct_months_with_orders ;;
     }
 
     measure: average_order_value {
       type: average
+      value_format_name: usd
       sql:${TABLE}.order_value ;;
     }
 
     measure: average_lifetime_revenue {
       type: average
+      value_format_name: usd
       sql: ${lifetime_revenue} ;;
     }
   }
