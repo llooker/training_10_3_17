@@ -10,6 +10,7 @@ view: users {
 
   dimension: age {
     type: number
+    value_format_name: decimal_0
     sql: ${TABLE}.age ;;
   }
 
@@ -40,6 +41,7 @@ view: users {
 
   dimension: years_a_customer {
     type: number
+    value_format_name: decimal_0
     sql: DATEDIFF(year, ${created_date}, current_date) ;;
   }
 

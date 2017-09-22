@@ -55,6 +55,7 @@ view: order_items {
 
   dimension: sale_price {
     type: number
+    value_format_name: usd
     sql: ${TABLE}.sale_price ;;
   }
 
