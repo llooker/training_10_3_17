@@ -116,12 +116,12 @@ view: order_items {
 
 ## MEASURES ##
 
-  measure: count {
+  measure: order_item_count {
     type: count
     drill_fields: [detail*]
   }
 
-  measure: total_sale_price {
+  measure: total_revenue {
     type: sum
     value_format_name: usd
     sql: ${sale_price} ;;
@@ -144,17 +144,17 @@ view: order_items {
   measure: average_spend_per_user {
     type: number
     value_format_name: usd
-    sql: 1.0 * ${total_sale_price} / NULLIF(${users.count},0) ;;
+    sql: 1.0 * ${total_revenue} / NULLIF(${users.count},0) ;;
   }
 
-  measure: sum_of_profit {
+  measure: total_profit {
     type: sum
     sql: ${profit} ;;
     value_format_name: usd
   }
 
-  measure: sum_shipping_time {
-    type: sum
+  measure: average_shipping_time {
+    type: average
     sql: ${shipping_time} ;;
     value_format: "0\" days\""
   }
