@@ -10,6 +10,7 @@ view: inventory_items {
 
   dimension: cost {
     type: number
+    value_format_name: usd
     sql: ${TABLE}.cost ;;
   }
 
@@ -61,6 +62,7 @@ view: inventory_items {
 
   dimension: product_retail_price {
     type: number
+    value_format_name: usd
     sql: ${TABLE}.product_retail_price ;;
   }
 
