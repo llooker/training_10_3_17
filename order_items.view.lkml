@@ -169,6 +169,7 @@ view: order_items {
     type: sum
     sql: ${profit} ;;
     value_format_name: usd
+    drill_fields: [id, created_date, total_profit]
   }
 
   measure: is_greater_than_9k {
