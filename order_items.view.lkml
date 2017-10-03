@@ -3,10 +3,26 @@ view: order_items {
 
   dimension: id {
     hidden:  yes
-    primary_key: yes
+#     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
   }
+
+  dimension: reporting_period {
+    group_label: "Order Date"
+    sql: CASE
+        WHEN date_part('year',${created_raw}) = date_part('year',current_date)
+        AND ${created_raw} < CURRENT_DATE
+        THEN 'This Year to Date'
+
+        WHEN date_part('year',${created_raw}) + 1 = date_part('year',current_date)
+        AND date_part('dayofyear',${created_raw}) <= date_part('dayofyear',current_date)
+        THEN 'Last Year to Date'
+
+      END
+       ;;
+  }
+
 
   dimension_group: created {
     description: "When the order was created"
@@ -154,6 +170,12 @@ view: order_items {
     sql: ${profit} ;;
     value_format_name: usd
   }
+
+  measure: is_greater_than_9k {
+    type: yesno
+    sql: ${total_profit} >= 9000 ;;
+  }
+
 
   measure: average_shipping_time {
     type: average
