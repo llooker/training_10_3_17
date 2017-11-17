@@ -12,13 +12,13 @@ map_layer: map_regions {
 }
 
 
-
-
-
-
-
+# explore: order_items_2 {
+#   from: order_items
+#   label: "Standalone Orders"
+# }
 
 explore: order_items {
+  fields: [ALL_FIELDS*, -order_items.total_active_users]
   join: users {
     type: left_outer
     sql_on: ${order_items.user_id} = ${users.id} ;;

@@ -118,6 +118,11 @@ view: order_items {
     sql: ${TABLE}.order_id ;;
   }
 
+  measure: total_active_users {
+    type: count_distinct
+    sql: ${user_id} ;;
+  }
+
   dimension: user_id {
     type: number
     hidden: yes
@@ -133,6 +138,22 @@ view: order_items {
   }
 
 ## MEASURES ##
+
+measure: return_count {
+  type: count
+  filters: {
+    field: returned_date
+    value: "-NULL"
+  }
+  drill_fields: [user_id, order_id, returned_date]
+}
+
+measure:  return_rate {
+  type: number
+  sql:  ${return_count}*1.0 / NULLIF(${order_item_count},0);;
+  value_format_name: percent_2
+  drill_fields: [return_count, order_item_count]
+}
 
   measure: order_item_count {
     type: count
