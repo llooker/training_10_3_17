@@ -9,12 +9,22 @@
         , COUNT(DISTINCT DATE_TRUNC('month', NULLIF(order_items.created_at,0))) as number_of_distinct_months_with_orders
         , SUM(order_items.sale_price) AS order_value
       FROM order_items
+      WHERE
+        1=1
+        AND {% condition my_fact_filter %} order_items.created_at  {% endcondition %}
       GROUP BY user_id
        ;;
-      sortkeys: ["user_id"]
-      distribution: "user_id"
-      sql_trigger_value: SELECT current_date ;;
+      # sortkeys: ["user_id","lifetime_orders"]
+      # distribution: "user_id"
+#       sql_trigger_value: select current_date;;
+#       persist_for: "24 hours"
+    # datagroup_trigger: nightly_etl
+
     }
+
+  filter: my_fact_filter {
+    type: date
+  }
 
     dimension_group: first_order {
       type: time

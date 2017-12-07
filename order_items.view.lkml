@@ -3,10 +3,17 @@ view: order_items {
 
   dimension: id {
     hidden:  yes
-#     primary_key: yes
+    primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
   }
+
+#   dimension: pk {
+#     type: string
+#     sql: ${id} || '-' || ${order_id} ;;
+#     primary_key: yes
+#   }
+
 
   dimension: reporting_period {
     group_label: "Order Date"
@@ -90,10 +97,16 @@ view: order_items {
     sql: ${TABLE}.returned_at ;;
   }
 
+dimension: tax_rate {
+  hidden: yes
+  type: number
+  sql: 0.70  ;;
+}
+
   dimension: sale_price {
     type: number
     value_format_name: usd
-    sql: ${TABLE}.sale_price ;;
+    sql: ${TABLE}.sale_price  * ${tax_rate} ;;
   }
 
   dimension_group: shipped {
@@ -120,6 +133,7 @@ view: order_items {
   dimension: shipping_time {
     description: "Shipping time in days"
     type: number
+    #REdshift Specific
     sql: DATEDIFF(day, ${order_items.shipped_date}, ${order_items.delivered_date}) ;;
   }
 
@@ -149,12 +163,26 @@ view: order_items {
     sql: ${TABLE}.user_id ;;
   }
 
+# filter: currency {
+#   type: string
+# }
+
+parameter: currency {
+  type: string
+  suggestions: ["USD","EUR","JPY"]
+}
+
   dimension: profit {
     description: "Profit made on any one item"
     hidden:  yes
     type: number
     value_format_name: usd
-    sql: ${sale_price} - ${inventory_items.cost} ;;
+    sql:
+    CASE WHEN {% parameter currency %} = 'USD' THEN ${sale_price} - ${inventory_items.cost}
+    ELSE (${sale_price} - ${inventory_items.cost}) * .9
+    END
+     ;;
+
   }
 
 ## MEASURES ##
@@ -193,11 +221,26 @@ measure:  return_rate {
     sql: ${order_id} ;;
   }
 
+  dimension: user_attribute {
+    type: string
+    sql:
+    '{{ _user_attributes["category"] }}'
+    ;;
+  }
+
+
   measure: average_sale_price {
     type: average
     value_format_name: usd
     sql: ${sale_price} ;;
     drill_fields: [detail*]
+    html:
+      {% if _user_attributes["category"] == "Jeans" %}
+        <p style="color:red;">{{rendered_value}}</p>
+      {% else %}
+        <p style="color:black;">{{rendered_value}}</p>
+      {% endif %}
+    ;;
   }
 
   measure: average_spend_per_user {

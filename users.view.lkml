@@ -2,7 +2,7 @@ view: users {
   sql_table_name: public.users ;;
 
   dimension: id {
-    hidden:  yes
+#     hidden:  yes
     primary_key: yes
     type: number
     sql: ${TABLE}.id ;;
@@ -12,6 +12,12 @@ view: users {
     type: number
     value_format_name: decimal_0
     sql: ${TABLE}.age ;;
+  }
+
+
+  dimension: is_over_21 {
+    type:  yesno
+    sql:  ${age} >= 21 ;;
   }
 
   dimension: age_tier {
@@ -56,6 +62,23 @@ view: users {
     type: string
     sql: ${TABLE}.email ;;
   }
+
+  filter: comparison_group {
+    type: string
+    suggest_dimension: users.email
+  }
+
+  dimension: group {
+    type: string
+    sql:
+        CASE
+        WHEN {% condition users.email %} ${email} {% endcondition %} then 'Comparison Group'
+        ELSE 'Rest of Population'
+        END
+
+    ;;
+  }
+
 
   dimension: first_name {
     hidden:  yes
