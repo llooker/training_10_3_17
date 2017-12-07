@@ -31,6 +31,7 @@ view: order_items {
       raw,
       time,
       date,
+      hour_of_day,
       week,
       month,
       month_num,
@@ -39,6 +40,25 @@ view: order_items {
     ]
     sql: ${TABLE}.created_at ;;
   }
+
+#
+#   dimension: created_hour_of_day {
+#     type: date_hour_of_day
+#     sql: ${TABLE}.created_at ;;
+#   }
+
+  dimension: shift_type {
+    group_label: "Created Date"
+    type: string
+    sql:
+      CASE
+        WHEN ${order_items.created_hour_of_day} or ${created_hour_of_day} > 19 THEN 'Night Shift'
+        ELSE 'Day Shift'
+      END
+    ;;
+  }
+
+
 
   dimension_group: delivered {
     description: "When the order was delivered"
@@ -94,7 +114,7 @@ view: order_items {
   dimension: status {
     description: "Whether order is processing, shipped, completed, etc."
     type: string
-    sql: ${TABLE}.status ;;
+    sql: lower(${TABLE}.status) ;;
   }
 
   dimension: shipping_time {
