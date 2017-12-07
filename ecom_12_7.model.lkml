@@ -14,11 +14,11 @@ explore: order_items {
     relationship: many_to_one
   }
 
- join: user_order_facts {
-   type: left_outer
-   sql_on: ${user_order_facts.user_id} = ${user_id} ;;
-   relationship: many_to_one
- }
+  join: user_order_facts {
+    type: left_outer
+    sql_on: ${user_order_facts.user_id} = ${user_id} ;;
+    relationship: many_to_one
+  }
 
   join: inventory_items {
     type: left_outer
