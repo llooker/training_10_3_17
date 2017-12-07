@@ -52,7 +52,7 @@ view: order_items {
     type: string
     sql:
       CASE
-        WHEN ${order_items.created_hour_of_day} or ${created_hour_of_day} > 19 THEN 'Night Shift'
+        WHEN ${order_items.created_hour_of_day} < 4 or ${created_hour_of_day} > 19 THEN 'Night Shift'
         ELSE 'Day Shift'
       END
     ;;
