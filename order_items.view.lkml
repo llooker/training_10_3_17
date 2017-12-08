@@ -126,6 +126,7 @@ dimension: tax_rate {
 
   dimension: status {
     description: "Whether order is processing, shipped, completed, etc."
+    label: "Order Delivery Status"
     type: string
     sql: lower(${TABLE}.status) ;;
   }

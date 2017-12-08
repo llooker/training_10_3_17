@@ -29,6 +29,7 @@ view: inventory_items {
   }
 
   dimension: product_brand {
+    hidden: yes
     type: string
     sql: ${TABLE}.product_brand ;;
   }
